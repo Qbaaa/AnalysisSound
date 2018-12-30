@@ -1,0 +1,9 @@
+.idea
+/pliki dzwiekowe
+/static
+*.iml
+test.py
+test2.py
+test3.py
+PC2.py
+/__pycache__
