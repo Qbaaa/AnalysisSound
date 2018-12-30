@@ -1,4 +1,6 @@
 import sys
+
+import pygame
 from PyQt5.QtCore import QRect
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox, QMenuBar, QMenu, QAction, QWidget, \
     QGroupBox, QPushButton, QRadioButton, QComboBox, QVBoxLayout
@@ -9,6 +11,7 @@ class Ui_MainWindow(object):
     overlap = 0.1
     nperseg = 32
     window = 'hamming'
+    pause = False
 
 
     def setupUi(self, MainWindow):
@@ -38,15 +41,19 @@ class Ui_MainWindow(object):
         self.pushButtonPlay = QPushButton(self.groupBox)
         self.pushButtonPlay.setGeometry(QRect(20, 80, 31, 23))
         self.pushButtonPlay.setText("Play")
+        self.pushButtonPlay.clicked.connect(self.filePlay)
         self.pushButtonStop = QPushButton(self.groupBox)
         self.pushButtonStop.setGeometry(QRect(110, 80, 31, 23))
         self.pushButtonStop.setText("Stop")
+        self.pushButtonStop.clicked.connect(self.fileStop)
         self.pushButtonPause = QPushButton(self.groupBox)
         self.pushButtonPause.setGeometry(QRect(60, 80, 41, 23))
         self.pushButtonPause.setText("Pause")
+        self.pushButtonPause.clicked.connect(self.filePause)
         self.radioButtonCalosc = QRadioButton(self.groupBox)
         self.radioButtonCalosc.setGeometry(QRect(10, 20, 91, 20))
         self.radioButtonCalosc.setText("całe nagranie")
+        self.radioButtonCalosc.setChecked(True)
         self.radioButtonFragment = QRadioButton(self.groupBox)
         self.radioButtonFragment.setGeometry(QRect(10, 40, 161, 17))
         self.radioButtonFragment.setText("wybrany przedział nagrania")
@@ -166,9 +173,46 @@ class Ui_MainWindow(object):
             print(self.nameFileWave)
 
 
+    def filePlay(self):
+
+        if self.nameFileWave == "":
+            QMessageBox.information(None,'Informacja','Nie został wczytany żaden dźwięk.',QMessageBox.Ok)
+        else:
+            if self.radioButtonCalosc.isChecked() == True:
+                print("Calosc")
+
+                if self.pause == False:
+                    pygame.mixer.music.load(self.nameFileWave)
+                    pygame.mixer.music.play()
+                    print("NIE uruchomiona  pauza")
+
+                else:
+                    pygame.mixer.music.unpause()
+                    self.pause = False
+
+            else:
+                print("Fragment")
+
+    def filePause(self):
+        if self.nameFileWave == "":
+            QMessageBox.information(None,'Informacja','Nie został wczytany żaden dźwięk.',QMessageBox.Ok)
+        else:
+            pygame.mixer.music.pause()
+            self.pause = True
+            print('Pause')
+
+    def fileStop(self):
+        if self.nameFileWave == "":
+            QMessageBox.information(None,'Informacja','Nie został wczytany żaden dźwięk.',QMessageBox.Ok)
+        else:
+            pygame.mixer.music.stop()
+            self.pause = False
+            print("Stop")
 
 if __name__ == "__main__":
     def run():
+
+        pygame.init()
         app = QApplication(sys.argv)
         window=QMainWindow()
 
