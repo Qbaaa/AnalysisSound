@@ -1,4 +1,3 @@
-import os
 from scipy.io import wavfile
 from scipy import fftpack
 from scipy.signal import get_window, signaltools
@@ -9,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox,
     QGroupBox, QPushButton, QRadioButton, QComboBox, QVBoxLayout
 import pyqtgraph as pg
 import numpy as np
-
+import os
 
 class Ui_MainWindow(object):
     nameFileWave = ''
@@ -137,7 +136,7 @@ class Ui_MainWindow(object):
         app.aboutToQuit.connect(self.closeEvent)
 
     def fileName(self):
-        wave = QFileDialog.getOpenFileName(caption='Wczytaj dzwiek', directory='F:/UKSW/V sem/Moje/CPS/Spektogram/',
+        wave = QFileDialog.getOpenFileName(caption='Wczytaj dzwiek',
                                            filter="Music(*.wav)", options=QFileDialog.DontUseNativeDialog)
 
         if wave == ('', ''):
@@ -524,13 +523,10 @@ class Ui_MainWindow(object):
         return overlap
 
     def closeEvent(self):
-
-        print("test")
         if os.path.isfile('fragment.wav'):
             pygame.mixer.quit()
             os.remove('fragment.wav')
-            print("usowam")
-        sys.exit()
+        #sys.exit()
 
 if __name__ == "__main__":
     pygame.init()
